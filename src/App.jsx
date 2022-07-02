@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 
 const api = {
@@ -17,7 +17,7 @@ function App() {
   const [weatherData, setWeatherData] = useState({})
 
   const searchPressed = () => {
-    fetch(`${api.base}weather?q=cheyenne&units=metric&&APPID=${api.key}`)
+    fetch(`${api.base}weather?q=${search}&units=metric&&APPID=${api.key}`)
     .then((res) => res.json())
     .then((result) => {
       const data = {
@@ -25,15 +25,20 @@ function App() {
         weather: result.weather[0].description,
         temp: result.main.temp,
         temp_max: result.main.temp_max,
-        temp_min: result.main.temp_min
+        temp_min: result.main.temp_min,
+        pressure: result.main.pressure
       }
       setWeatherData(data)
     })
   }
 
+  // useEffect(() => {
+  //   console.log(search);
+  // }, [search])
+
   return (
     <div className="App">
-      <h1 id='title'>Weather App</h1>
+      <h1 id='title'>Imperial Weather</h1>
 
       <div className="input">
         <input type="text" placeholder='Search...' onChange={(e) => setSearch(e.target.value)} />
@@ -43,13 +48,14 @@ function App() {
       </div>
 
       <div className="data-display">
-        <p id="">{search}</p>
-        <p id="">{weatherData.weather}</p>
-        <p id="">{weatherData.temp}</p>
-        <p id="">{weatherData.temp_min}</p>
-        <p id="">{weatherData.temp_max}</p>
-        <p id="">{}</p>
-        <p id="">{}</p>
+        <p id="CityName">{search}</p>
+        
+        <div className="important-data">
+          <p id="descriptiom">Description: {weatherData.weather}</p>
+          <p id="teperature"> Temperature: {weatherData.temp}</p>
+          <p id="">Air Pressure{weatherData.pressure}</p>
+          <p id="">{}</p>
+        </div>
         <p id="">Sunny</p>
       </div>
     </div>
